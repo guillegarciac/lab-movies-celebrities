@@ -13,8 +13,8 @@ router.get("/create", (req, res, next) => {
 router.post("/create", async (req, res, next) => {
   const { name, occupation, catchPhrase } = req.body;
   try {
-    await Celebrity.create({ name, occupation, catchPhrase });
-    res.redirect("/celebrities");
+    const newCelebrity = await Celebrity.create({ name, occupation, catchPhrase });
+    res.redirect(`/celebrities/${newCelebrity._id}`);
   } catch (error) {
     res.redirect("/celebrities/create");
   }

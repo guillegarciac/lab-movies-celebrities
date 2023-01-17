@@ -16,6 +16,9 @@ const celebritySchema = new Schema ({
         type: String,
         required: true,
     }
+},
+{
+  timestamps: true
 })
 
 const Celebrity = mongoose.model('Celebrity', celebritySchema);

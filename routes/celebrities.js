@@ -1,8 +1,20 @@
 // starter code in both routes/celebrities.routes.js and routes/movies.routes.js
-const router = require("express").Router();
+const express = require('express');
+const router = express.Router();
 const Celebrity = require("../models/Celebrity.model");
 
 // all your routes here
+
+/* GET all celebrities */
+router.get('/', async (req, res, next) => {
+  // Iteration #2: List the celebrities
+  try {
+    const celebrities = await Celebrity.find({});
+    res.render("celebrities/celebrities", { celebrities });
+  } catch (error) {
+    next(error);
+  }
+});
 
 /* GET new-celebrities - form to create a celebrity */
 router.get("/create", (req, res, next) => {
@@ -13,8 +25,8 @@ router.get("/create", (req, res, next) => {
 router.post("/create", async (req, res, next) => {
   const { name, occupation, catchPhrase } = req.body;
   try {
-    const newCelebrity = await Celebrity.create({ name, occupation, catchPhrase });
-    res.redirect(`/celebrities/${newCelebrity._id}`);
+    await Celebrity.create({ name, occupation, catchPhrase });
+    res.redirect('/celebrities');
   } catch (error) {
     res.redirect("/celebrities/create");
   }

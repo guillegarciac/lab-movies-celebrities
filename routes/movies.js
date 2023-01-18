@@ -1,5 +1,6 @@
 // starter code in both routes/celebrities.routes.js and routes/movies.routes.js
-const router = require("express").Router();
+const express = require('express');
+const router = express.Router();
 const Celebrity = require("../models/Celebrity.model");
 const Movie = require("../models/Movie.model");
 
@@ -7,14 +8,22 @@ const Movie = require("../models/Movie.model");
 
 /* GET all movies */
 router.get("/", async (req, res, next) => {
-  const movies = await Movie.find({});
-  res.render("movies/movies", { movies });
+  try {
+    const movies = await Movie.find({});
+    res.render("movies/movies", { movies });
+  } catch (error) {
+    next(error)
+  }   
 })
 
 /* GET new-movies - form to get celebrities in dropdown later with >multiple */
 router.get("/create", async (req, res, next) => {
-  const celebrities = await Celebrity.find({});
-  res.render("movies/new-movie", { celebrities });
+  try {
+    const celebrities = await Celebrity.find({});
+    res.render("movies/new-movie", { celebrities });
+  } catch (error) {
+    next(error);
+  }
 })
 
 /* POST new-movie in database */
@@ -24,7 +33,18 @@ router.post("/create", async (req, res, next) => {
     await Movie.create({ title, genre, plot, cast });
     res.redirect("/movies");
   } catch (error) {
-    res.redirect("/movies/create");
+    next(error);
+  }
+})
+
+/* GET movie-details + id*/
+router.get("/:movieId", async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const movieSelected = await Movie.findById(movieId).populate("cast");
+    res.render("movies/movie-details", {movieSelected});
+  } catch (error) {
+    next(error);
   }
 })
 

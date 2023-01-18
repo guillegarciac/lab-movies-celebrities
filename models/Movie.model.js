@@ -14,8 +14,8 @@ const movieSchema = new Schema ({
         type: String,
     },
     cast: {
-        type: Schema.Types.ObjectId,
-        ref: 'Celebrity.model'
+        type: [Schema.Types.ObjectId],
+        ref: 'Celebrity'
     }
 },
 {

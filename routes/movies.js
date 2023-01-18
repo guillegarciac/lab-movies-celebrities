@@ -37,7 +37,7 @@ router.post("/create", async (req, res, next) => {
   }
 })
 
-/* GET movie-details + id*/
+/* GET movie-details /details/:movieId */
 router.get("/details/:movieId", async (req, res, next) => {
   const { movieId } = req.params;
   try {
@@ -48,14 +48,37 @@ router.get("/details/:movieId", async (req, res, next) => {
   }
 })
 
-// GET delete movie
+/* GET delete/:movieId */
 router.get('/delete/:movieId', async (req, res, next) => {
   const { movieId } = req.params;
   try {
-      await Movie.findByIdAndDelete(movieId);
-      res.redirect('/movies');
+    await Movie.findByIdAndDelete(movieId);
+    res.redirect('/movies');
   } catch (error) {
-      next(error);
+    next(error);
+  }
+})
+
+/* GET for edit /movies/edit/:movieId */
+router.get('/edit/:movieId', async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const movie = await Movie.findById(movieId).populate('cast');
+    res.render('movies/edit-movie', movie);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* POST for edit /movies/edit/:movieId */
+router.post('/edit/:movieId', async (req, res, next) => {
+  const { movieId } = req.params;
+  const { title, genre, plot, cast } = req.body;
+  try {
+    await Movie.findByIdAndUpdate(movieId, { title, genre, plot, cast });
+    res.redirect(`/movies/details/${movieId}`);
+  } catch (error) {
+    next(error);
   }
 })
 

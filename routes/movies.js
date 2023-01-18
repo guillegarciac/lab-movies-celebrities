@@ -38,11 +38,11 @@ router.post("/create", async (req, res, next) => {
 })
 
 /* GET movie-details + id*/
-router.get("/:movieId", async (req, res, next) => {
+router.get("/details/:movieId", async (req, res, next) => {
   const { movieId } = req.params;
   try {
     const movieSelected = await Movie.findById(movieId).populate("cast");
-    res.render("movies/movie-details", {movieSelected});
+    res.render("movies/movie-details", movieSelected);
   } catch (error) {
     next(error);
   }
